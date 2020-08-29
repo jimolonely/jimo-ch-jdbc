@@ -1,6 +1,8 @@
 package com.jimo.ch;
 
 import com.google.common.collect.MapMaker;
+import com.jimo.ch.setting.ClickHouseProperties;
+import com.jimo.ch.util.LogProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +37,20 @@ public class ClickHouseDriver implements Driver {
     @Override
     public Connection connect(String url, Properties info) throws SQLException {
         return null;
+    }
+
+    public ClickHouseConnection connect(String url, ClickHouseProperties info) throws SQLException {
+        if (!acceptsURL(url)) {
+            return null;
+        }
+        logger.debug("Create Connection");
+        final ClickHouseConnectionImpl connection = new ClickHouseConnectionImpl(url, info);
+        registerConnection(connection);
+        return LogProxy.wrap(ClickHouseConnection.class, connection);
+    }
+
+    private void registerConnection(ClickHouseConnectionImpl connection) {
+        connections.put(connection, Boolean.TRUE);
     }
 
     @Override
