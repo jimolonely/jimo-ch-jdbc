@@ -1,12 +1,17 @@
 package com.jimo.ch;
 
 import com.google.common.collect.MapMaker;
+import com.jimo.ch.setting.ClickHouseConnectionSettings;
 import com.jimo.ch.setting.ClickHouseProperties;
+import com.jimo.ch.setting.ClickHouseQueryParam;
+import com.jimo.ch.setting.DriverPropertyCreator;
 import com.jimo.ch.util.LogProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentMap;
 
@@ -60,7 +65,27 @@ public class ClickHouseDriver implements Driver {
 
     @Override
     public DriverPropertyInfo[] getPropertyInfo(String url, Properties info) throws SQLException {
-        return new DriverPropertyInfo[0];
+        final Properties copy = new Properties(info);
+        Properties properties;
+        try {
+            properties = ClickHouseJdbcUrlParser.parse(url, copy).asProperties();
+        } catch (Exception e) {
+            properties = copy;
+            logger.error("parse url properties failed {}", url, e);
+        }
+        List<DriverPropertyInfo> result =
+                new ArrayList<>(ClickHouseQueryParam.values().length + ClickHouseConnectionSettings.values().length);
+        result.addAll(dumpProperties(ClickHouseQueryParam.values(), properties));
+        result.addAll(dumpProperties(ClickHouseConnectionSettings.values(), properties));
+        return result.toArray(new DriverPropertyInfo[0]);
+    }
+
+    private List<DriverPropertyInfo> dumpProperties(DriverPropertyCreator[] creators, Properties properties) {
+        List<DriverPropertyInfo> result = new ArrayList<>(creators.length);
+        for (DriverPropertyCreator creator : creators) {
+            result.add(creator.createDriverPropertyInfo(properties));
+        }
+        return result;
     }
 
     @Override
