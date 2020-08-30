@@ -114,4 +114,8 @@ public class ClickHouseProperties {
     public int getMaxRedirects() {
         return maxRedirects;
     }
+
+    public boolean isUseServerTimeZoneForDates() {
+        return false;
+    }
 }
