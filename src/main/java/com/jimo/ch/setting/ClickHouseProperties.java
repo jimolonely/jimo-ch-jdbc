@@ -4,6 +4,11 @@ import java.util.Properties;
 
 public class ClickHouseProperties {
 
+    private String useTimeZone;
+    private boolean useServerTimeZone;
+
+    private int port;
+
     public ClickHouseProperties(Properties info) {
 
     }
@@ -29,5 +34,33 @@ public class ClickHouseProperties {
 
     public String getHost() {
         return null;
+    }
+
+    public boolean isUseServerTimeZone() {
+        return useServerTimeZone;
+    }
+
+    public String getUseTimeZone() {
+        return useTimeZone;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setDatabase(String catalog) {
+
+    }
+
+    public String getDatabase() {
+        return null;
+    }
+
+    public void setConnectionTimout(int timeout) {
+
+    }
+
+    public void setMaxExecutionTime(int max) {
+
     }
 }

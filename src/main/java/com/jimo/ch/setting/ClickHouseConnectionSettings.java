@@ -10,7 +10,11 @@ import java.util.Properties;
  */
 public enum ClickHouseConnectionSettings implements DriverPropertyCreator {
 
-    ASYNC("async", false, "");
+    ASYNC("async", false, ""),
+
+    USE_SERVER_TIME_ZONE("use_server_time_zone", true, "Whether to use timezone from server. On connection init " +
+            "select timezone() will be executed"),
+    USE_TIME_ZONE("use_time_zone", "", "Which time zone to use");
 
     private final String key;
     private final Object defaultValue;
