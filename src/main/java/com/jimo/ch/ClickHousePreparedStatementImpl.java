@@ -3,7 +3,10 @@ package com.jimo.ch;
 import com.jimo.ch.response.ClickHouseResponse;
 import com.jimo.ch.setting.ClickHouseProperties;
 import com.jimo.ch.setting.ClickHouseQueryParam;
+import com.jimo.ch.util.ClickHouseRowBinaryInputStream;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -21,11 +24,15 @@ import java.util.TimeZone;
  */
 public class ClickHousePreparedStatementImpl implements ClickHousePreparedStatement {
 
-    public ClickHousePreparedStatementImpl(CloseableHttpClient httpClient, ClickHouseConnection connection,
+    private static final Logger log = LoggerFactory.getLogger(ClickHouseStatementImpl.class);
+
+    public ClickHousePreparedStatementImpl(CloseableHttpClient httpClient,
+                                           ClickHouseConnectionImpl clickHouseConnection,
                                            ClickHouseProperties properties, String sql, TimeZone timezone,
                                            int resultType) {
 
     }
+
 
     @Override
     public ClickHouseResponse executeQueryClickHouseResponse() throws SQLException {
@@ -463,7 +470,7 @@ public class ClickHousePreparedStatementImpl implements ClickHousePreparedStatem
     }
 
     @Override
-    public Connection getConnection() throws SQLException {
+    public ClickHouseConnection getConnection() throws SQLException {
         return null;
     }
 
@@ -546,4 +553,51 @@ public class ClickHousePreparedStatementImpl implements ClickHousePreparedStatem
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return false;
     }
+
+    @Override
+    public ClickHouseResponse executeQueryClickHouseResponse(String sql) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public ClickHouseResponse executeQueryClickHouseResponse(String sql,
+                                                             Map<ClickHouseQueryParam, String> additionalParams) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public ClickHouseResponse executeQueryClickHouseResponse(String sql,
+                                                             Map<ClickHouseQueryParam, String> additionalParams,
+                                                             Map<String, String> additionalRequestParams) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public ClickHouseRowBinaryInputStream executeQueryClickHouseRowBinaryStream(String sql) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public ClickHouseRowBinaryInputStream executeQueryClickHouseRowBinaryStream(String sql, Map<ClickHouseQueryParam,
+            String> additionalParams) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public ClickHouseRowBinaryInputStream executeQueryClickHouseRowBinaryStream(String sql, Map<ClickHouseQueryParam,
+            String> additionalParams, Map<String, String> additionalRequestParams) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public ResultSet executeQuery(String sql, Map<ClickHouseQueryParam, String> additionalParams) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public ResultSet executeQuery(String sql, Map<ClickHouseQueryParam, String> additionalParams,
+                                  Map<String, String> additionalRequestParams) throws SQLException {
+        return null;
+    }
+
 }

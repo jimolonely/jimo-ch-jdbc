@@ -73,6 +73,7 @@ public class ClickHouseConnectionImpl implements ClickHouseConnection {
             ResultSet rs = null;
             try {
                 timeZone = TimeZone.getTimeZone("UTC");
+                //noinspection SqlResolve
                 rs = createStatement().executeQuery("select timezone()");
                 rs.next();
                 String timeZoneName = rs.getString(1);
@@ -212,7 +213,13 @@ public class ClickHouseConnectionImpl implements ClickHouseConnection {
 
     @Override
     public String getServerVersion() throws SQLException {
-        return null;
+        if (serverVersion == null) {
+            final ResultSet rs = createStatement().executeQuery("SELECT version()");
+            rs.next();
+            serverVersion = rs.getString(1);
+            rs.close();
+        }
+        return serverVersion;
     }
 
     @Override

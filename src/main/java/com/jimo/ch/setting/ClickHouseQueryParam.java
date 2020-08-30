@@ -10,7 +10,25 @@ import java.util.Properties;
  */
 public enum ClickHouseQueryParam implements DriverPropertyCreator {
 
-    COMPRESS("compress", false, Boolean.class, "whether to compress transfer data or not");
+    COMPRESS("compress", false, Boolean.class, "whether to compress transfer data or not"),
+    QUERY_ID("query_id", null, String.class, ""),
+    DATABASE("database", null, String.class, "database name used by default"),
+
+
+    MAX_RESULT_ROWS("max_result_rows", null, Integer.class, "Limit on the number of rows in the result. Also checked " +
+            "for subqueries, and on remote servers when running parts of a distributed query."),
+
+    RESULT_OVERFLOW_MODE("result_overflow_mode", null, String.class, "What to do if the volume of the result exceeds " +
+            "one of the limits: 'throw' or 'break'. By default, throw. Using 'break' is similar to using LIMIT."),
+    /**
+     * https://clickhouse.yandex/reference_en.html#max_execution_time
+     */
+    MAX_EXECUTION_TIME("max_execution_time", null, Integer.class, "Maximum query execution time in seconds."),
+
+    /**
+     * https://clickhouse.yandex/reference_en.html#Extreme values
+     */
+    EXTREMES("extremes", false, Boolean.class, "Whether to include extreme values.");
 
     private final String key;
     private final Object defaultValue;

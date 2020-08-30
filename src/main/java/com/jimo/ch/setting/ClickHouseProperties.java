@@ -1,5 +1,6 @@
 package com.jimo.ch.setting;
 
+import java.util.Map;
 import java.util.Properties;
 
 public class ClickHouseProperties {
@@ -8,6 +9,20 @@ public class ClickHouseProperties {
     private boolean useServerTimeZone;
 
     private int port;
+    /**
+     * If set to <code>true</code>, driver will first try to connect to the server using GET request. If the response
+     * is 307,
+     * it will use URI given in the response's Location header instead of the original one.
+     * <p>
+     * Those queries will be repeated until response is anything other than 307, or until
+     * {@link ClickHouseProperties#maxRedirects maxRedirects} is hit.
+     * <p>
+     * This is a workaround to issues with properly following HTTP POST redirects.
+     * Namely, Apache HTTP client's inability to process early responses, and difficulties with resending non-repeatable
+     * {@link org.apache.http.entity.InputStreamEntity InputStreamEntity}
+     */
+    private boolean checkForRedirects;
+    private int maxRedirects;
 
     public ClickHouseProperties(Properties info) {
 
@@ -62,5 +77,41 @@ public class ClickHouseProperties {
 
     public void setMaxExecutionTime(int max) {
 
+    }
+
+    public boolean isCompress() {
+        return false;
+    }
+
+    public int getBufferSize() {
+        return 0;
+    }
+
+    public boolean getSsl() {
+        return false;
+    }
+
+    public String getPath() {
+        return null;
+    }
+
+    public Map<ClickHouseQueryParam, String> buildQueryParams(boolean ignoreDatabase) {
+        return null;
+    }
+
+    public boolean isDecompress() {
+        return false;
+    }
+
+    public int getMaxCompressBufferSize() {
+        return 0;
+    }
+
+    public boolean isCheckForRedirects() {
+        return checkForRedirects;
+    }
+
+    public int getMaxRedirects() {
+        return maxRedirects;
     }
 }
