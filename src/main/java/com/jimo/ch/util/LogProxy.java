@@ -4,8 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
 
 /**
  * @author jimo
@@ -42,7 +44,18 @@ public class LogProxy<T> implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        // TODO
-        return null;
+        String msg = String.format("Call class: %s\n Method: %s\n Object: %s\n Args: %s\n Invoke result: ",
+                object.getClass().getName(), method.getName(), object, Arrays.toString(args));
+        try {
+            final Object invokeResult = method.invoke(object, args);
+            msg += invokeResult;
+            return invokeResult;
+        } catch (InvocationTargetException e) {
+            msg += e.getMessage();
+            throw e.getTargetException();
+        } finally {
+            msg = "=== ClickHouse JDBC trace begin ===\n" + msg + "\n === ClickHouse JDBC trace end ===";
+            log.trace(msg);
+        }
     }
 }
