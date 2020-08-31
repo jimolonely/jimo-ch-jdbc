@@ -47,7 +47,43 @@ public class StreamSplitter {
 //    }
 
     public ByteFragment next() throws IOException {
+        if (posNext >= posRead) {
+            int readBytes = readFromStream();
+            if (readBytes <= 0) {
+                return null;
+            }
+        }
+        int positionSep;
         return null;
+    }
+
+    private int readFromStream() throws IOException {
+        if (readOnce) {
+            if (posRead >= buf.length) {
+                return -1;
+            } else {
+                int read = delegate.read(buf, posRead, buf.length - posRead);
+                if (read > 0) {
+                    posRead += read;
+                }
+                return read;
+            }
+        } else {
+            if (posRead >= buf.length) {
+                shiftOrResize();
+            }
+            int read = delegate.read(buf, posRead, buf.length - posRead);
+            if (read > 0) {
+                posRead += read;
+            }
+            return read;
+        }
+    }
+
+    private void shiftOrResize() {
+        if (posNext > 0) {
+            byte[] oldBuf = buf;
+        }
     }
 
     public void mark() {
